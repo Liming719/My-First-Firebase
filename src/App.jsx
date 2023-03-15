@@ -1,34 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import {useState, useEffect} from "react";
+import {handleGoogleSignIn, handleSignout} from "./auth";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function LoginPage() {
+
+  const [userInfo, setUser] = useState({Name:"", Email:"", Token:""});  
+  
+  const handleLogin = async () => {
+    const user = await handleGoogleSignIn();
+    setUser(user);
+  };
+
+  const handlelogout = () =>{
+    handleSignout();
+    setUser({Name:"", Email:"", Token:""});
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <h1>Login Page</h1>
+      <div className="UserInfoContainer">
+        <ul>
+          <li>Name: {userInfo.Name}</li>
+          <li>E-Mail: {userInfo.Email}</li>
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={handleLogin}>Sign in with Google</button>
+      <button onClick={handlelogout}>Sign out</button>
     </div>
-  )
+  );
 }
-
-export default App
